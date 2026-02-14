@@ -1,10 +1,24 @@
 // Confetti animation for checkout success
-// Usage: import confetti from './confetti.js'; confetti();
-export default function confetti() {
+// Usage: import confetti from './confetti'; confetti();
+type ConfettiOptions = {
+  particleCount: number;
+  angle: number;
+  spread: number;
+  origin: { x: number; y: number };
+  colors: string[];
+};
+
+declare global {
+  interface Window {
+    confetti?: (options: ConfettiOptions) => void;
+  }
+}
+
+export default function confetti(): void {
   const duration = 1.5 * 1000;
   const animationEnd = Date.now() + duration;
   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-  function randomInRange(min, max) {
+  function randomInRange(min: number, max: number): number {
     return Math.random() * (max - min) + min;
   }
   const interval = setInterval(function () {

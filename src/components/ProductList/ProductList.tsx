@@ -2,9 +2,27 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ProductList.css";
 
-const ProductList = ({ products, addToCart, onProductClick }) => {
+type Product = {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+type ProductListProps = {
+  products: Product[];
+  addToCart: (productId: string) => void;
+  onProductClick: (product: Product) => void;
+};
+
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  addToCart,
+  onProductClick,
+}) => {
   return (
-    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 hover">
+    <div className="row row-cols-1 row-cols-md-3 g-4 hover">
       {products.map((product) => (
         <div key={product._id} className="col">
           <div className="card h-100 rounded-4 shadow-sm">
@@ -18,9 +36,6 @@ const ProductList = ({ products, addToCart, onProductClick }) => {
               <p className="card-text">
                 <strong>Price:</strong> ₹{product.price}
               </p>
-              <p className="card-text">
-                <strong>Quantity:</strong> {product.quantity}
-              </p>
               <div className="mt-auto">
                 <div className="d-flex flex-row align-items-center gap-2">
                   <button
@@ -33,7 +48,7 @@ const ProductList = ({ products, addToCart, onProductClick }) => {
                     className="btn btn-primary rounded-3 w-100"
                     onClick={(e) => {
                       e.stopPropagation();
-                      addToCart(product._id); // Use MongoDB _id
+                      addToCart(product._id);
                     }}
                     disabled={product.quantity === 0}
                   >

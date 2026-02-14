@@ -1,8 +1,8 @@
 .product-image {
-  height: 180px;
+  height: 140px;
   object-fit: cover;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 2px 12px #ff6a8833;
+  border-radius: 12px 12px 0 0;
+  box-shadow: none;
   margin-bottom: 0.5rem;
   position: relative;
   overflow: hidden;
@@ -17,7 +17,7 @@
   background: linear-gradient(
     120deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.3) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   transform: skewX(-20deg);
@@ -33,16 +33,14 @@
 }
 
 @media (max-width: 767px) {
-  .row-cols-md-3 {
-    --bs-rows: 4;
-    --bs-columns: 3;
+  .row-cols-1.row-cols-md-3 {
+    --bs-columns: 1;
   }
 }
 
 @media (min-width: 768px) {
-  .row-cols-md-3 {
-    --bs-rows: 3;
-    --bs-columns: 4;
+  .row-cols-1.row-cols-md-3 {
+    --bs-columns: 3;
   }
 }
 
@@ -50,66 +48,79 @@
   cursor: pointer;
 }
 
-/* Product cards: touch-friendly, marketing-inspired vibrant theme, bold box shadow, improved alignment */
+/* Product cards: glassmorphic design */
 .card {
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  box-shadow: 0 8px 32px 0 rgba(255, 94, 98, 0.18), 0 2px 8px #ff6a8855;
-  border-radius: 22px;
-  border: 1.5px solid #ff6a88aa;
+  background: #fff;
+  border: 1px solid #e1e7ef;
+  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+  border-radius: 12px;
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  min-height: 350px;
-  padding-bottom: 1rem;
-  transition: box-shadow 0.2s;
+  min-height: 260px;
+  padding-bottom: 0.5rem;
+  transition: box-shadow 0.2s ease;
 }
+.card:hover {
+  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.1);
+  transform: translateY(-2px);
+}
+
 .card-title {
-  color: #ff6a88;
+  color: #2f3b47;
   font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
-  font-size: 1.35rem;
-  letter-spacing: 0.04em;
-  text-align: left;
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
 }
 .card-text {
-  color: #2d3a4b;
-  font-size: 1.1rem;
-  text-align: left;
+  color: #2f3b47;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.card-body .card-text:first-of-type {
+  background: #2f3b47;
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
 }
 
 /* Buttons styling */
 .btn-primary,
 .btn-outline-secondary {
   width: 100%;
-  margin-bottom: 0.5rem;
-  border-radius: 1.7rem;
-  font-size: 1.13rem;
-  padding: 0.85rem 0;
-  box-shadow: 0 2px 8px #ff6a8833;
+  margin-bottom: 0.4rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  padding: 0.45rem 0;
+  box-shadow: none;
+  transition: all 0.3s ease;
 }
 .btn-primary {
-  background: linear-gradient(90deg, #ff6a88 0%, #ffb86c 100%);
+  background: #2f80ed;
   color: #fff;
-  border: none;
+  border: 1px solid #2f80ed;
   font-weight: bold;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover {
+  background: #256bd1;
 }
 .btn-outline-secondary {
-  border: 1.5px solid #ff6a88;
-  color: #ff6a88;
-  background: transparent;
+  border: 1px solid #d0d7e2;
+  color: #2f3b47;
+  background: #fff;
   font-weight: 500;
 }
-
-/* Remove all hover effects for touch devices */
-.card:hover,
-.btn-primary:hover,
 .btn-outline-secondary:hover {
-  box-shadow: 0 8px 32px 0 rgba(67, 198, 172, 0.25), 0 2px 8px #43c6ac33;
-  background: inherit;
-  color: inherit;
+  background: #f3f6fa;
+  border-color: #c6d0dc;
 }
 
 .card .d-flex.flex-row.align-items-center.gap-2 {
@@ -118,31 +129,38 @@
   align-items: stretch;
 }
 
-/* Floating cart button: add pulsing glow animation */
+/* Floating cart button */
 .floating-cart-btn {
   position: fixed;
   bottom: 2.5rem;
   right: 2.5rem;
-  background: linear-gradient(90deg, #ff6a88 0%, #ffb86c 100%);
+  background: rgba(255, 106, 136, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: #fff;
-  border: none;
   border-radius: 50%;
   width: 64px;
   height: 64px;
-  box-shadow: 0 4px 24px #ff6a8877, 0 0 0 0 #ffb86c;
+  box-shadow: 0 8px 32px 0 rgba(255, 106, 136, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
   z-index: 1000;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
   animation: pulseGlow 1.8s infinite alternate;
+}
+.floating-cart-btn:hover {
+  background: rgba(255, 106, 136, 1);
+  box-shadow: 0 12px 40px 0 rgba(255, 106, 136, 0.4);
+  transform: scale(1.1);
 }
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 4px 24px #ff6a8877, 0 0 0 0 #ffb86c;
+    box-shadow: 0 8px 32px 0 rgba(255, 106, 136, 0.3);
   }
   100% {
-    box-shadow: 0 8px 32px #ff6a88cc, 0 0 24px 8px #ffb86c88;
+    box-shadow: 0 12px 40px 0 rgba(255, 106, 136, 0.5);
   }
 }

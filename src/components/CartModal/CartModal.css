@@ -1,17 +1,14 @@
-/* Cart modal: solid background, no gradient, bold stylish font */
+/* Cart modal: glassmorphic design */
 .modal-content {
   position: relative;
-  border-radius: 2rem;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 0 32px 8px #ff6a88cc, 0 12px 48px 0 rgba(0, 0, 0, 0.22),
-    0 2px 12px #ff6a8855;
-  border: 2px solid #ff6a88cc;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: #111;
-  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  border: 1px solid #e1e7ef;
+  box-shadow: 0 12px 28px rgba(16, 24, 40, 0.12);
+  color: #1f2a33;
+  font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
   font-weight: bold;
-  font-size: 1.15rem;
+  font-size: 1rem;
 }
 
 .modal-content::before {
@@ -25,42 +22,45 @@
 }
 
 .btn-success {
-  background: #ff6a88;
-  border: none;
+  background: #2f80ed;
+  border: 1px solid #2f80ed;
   color: #fff;
   font-weight: bold;
-  border-radius: 2rem;
-  font-size: 1.13rem;
-  box-shadow: 0 0 16px 2px #ff6a88cc, 0 2px 8px #23252633;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  box-shadow: none;
   letter-spacing: 0.03em;
-  padding: 0.85rem 2.2rem;
+  padding: 0.6rem 1.4rem;
   text-transform: uppercase;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  transition: all 0.3s ease;
+  font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
+}
+.btn-success:hover {
+  background: #256bd1;
 }
 .btn-success:active {
-  background: #232526;
-  color: #fff;
-  box-shadow: 0 0 24px 4px #ff6a88ee;
+  background: #1f5bb6;
 }
 
 .btn-outline-danger {
-  border: 2px solid #ff4b2b;
-  color: #ff4b2b;
+  border: 1px solid #e3e8ef;
+  color: #2f3b47;
   background: #fff;
   font-weight: bold;
-  border-radius: 2rem;
-  font-size: 1.13rem;
-  box-shadow: 0 0 12px 2px #ff4b2bcc, 0 2px 8px #ff4b2b33;
-  padding: 0.85rem 2.2rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  box-shadow: none;
+  padding: 0.6rem 1.4rem;
   text-transform: uppercase;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  transition: all 0.3s ease;
+  font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
+}
+.btn-outline-danger:hover {
+  background: #f3f6fa;
+  border-color: #d5dde8;
 }
 .btn-outline-danger:active {
-  background: #ff4b2b;
-  color: #fff;
-  box-shadow: 0 0 20px 4px #ff4b2bee;
+  background: #e9edf2;
 }
 
 .modal-footer {
@@ -147,4 +147,10 @@
   font-size: 1.15rem;
   font-weight: bold;
   color: #111;
+}
+
+.cart-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
 }

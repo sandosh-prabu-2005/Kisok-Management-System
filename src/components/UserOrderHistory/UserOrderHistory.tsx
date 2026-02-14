@@ -3,15 +3,29 @@ import axios from "axios";
 import { Container, Table, Modal, Button, Form } from "react-bootstrap";
 import "animate.css";
 
+type SaleItem = {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+};
+
+type Sale = {
+  userId: string;
+  items: SaleItem[];
+  total: number;
+  timestamp: number;
+};
+
 const UserOrderHistory = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Sale[]>([]);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchOrders = async (adNo) => {
+  const fetchOrders = async (adNo: string): Promise<void> => {
     try {
-      const response = await axios.get("/api/sales");
+      const response = await axios.get<Sale[]>("/api/sales");
       const userOrders = response.data.filter((order) => order.userId === adNo);
       setOrders(userOrders);
     } catch (error) {
@@ -23,7 +37,7 @@ const UserOrderHistory = () => {
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!admissionNumber) {
       setError("Please enter your admission number.");
@@ -95,19 +109,16 @@ const UserOrderHistory = () => {
           </Table>
         </div>
       ) : (
-        <div
-          className="text-center animate__animated animate__fadeIn"
-          style={{ marginTop: 40 }}
-        >
+        <div className="text-center animate__animated animate__fadeIn orders-empty">
           <img
             src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
             alt="No orders"
-            style={{ width: 120, opacity: 0.7, marginBottom: 16 }}
+            className="orders-empty-img"
           />
-          <h4 className="mt-3" style={{ color: "#ff6a88" }}>
+          <h4 className="mt-3 orders-empty-title">
             No order history available.
           </h4>
-          <p style={{ color: "#232526" }}>
+          <p className="orders-empty-text">
             Your past orders will appear here after your first purchase!
           </p>
         </div>

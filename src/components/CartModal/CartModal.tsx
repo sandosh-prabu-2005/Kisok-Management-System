@@ -3,7 +3,27 @@ import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./CartModal.css";
 
-const CartModal = ({
+type CartItem = {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+type CartModalProps = {
+  show: boolean;
+  handleClose: () => void;
+  cart: CartItem[];
+  incrementQuantity: (productId: string) => void;
+  decrementQuantity: (productId: string) => void;
+  removeFromCart: (product: CartItem) => void;
+  clearCart: () => void;
+  calculateTotal: () => number;
+  checkout: () => void;
+};
+
+const CartModal: React.FC<CartModalProps> = ({
   show,
   handleClose,
   cart,
@@ -31,14 +51,9 @@ const CartModal = ({
               >
                 <div className="d-flex align-items-center">
                   <img
-                    className="img-fluid rounded-3 me-3"
                     src={product.image}
                     alt={product.name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                    }}
+                    className="img-fluid rounded-3 me-3 cart-item-image"
                   />
                   <div>
                     <h5 className="mb-0">{product.name}</h5>

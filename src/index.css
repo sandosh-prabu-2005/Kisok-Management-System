@@ -1,30 +1,14 @@
-/* Trendy, bright, and vibrant glassmorphic theme with bold fonts */
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Space+Grotesk:wght@700&display=swap");
+/* POS-style clean theme */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Space+Grotesk:wght@700&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 
-/* App-wide: dynamic animated background for kiosk */
 body {
   margin: 0;
   min-height: 100vh;
   font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 50%, #ff6a88 100%);
-  color: #232526;
-  background-attachment: fixed;
+  background: #e9edf2;
+  color: #1f2a33;
   letter-spacing: 0.01em;
-  animation: bgMove 12s ease-in-out infinite alternate;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-@keyframes bgMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
 }
 
 h1,
@@ -35,9 +19,8 @@ h5,
 h6 {
   font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #ff6a88;
-  text-shadow: 0 2px 12px #ffb86c55;
+  letter-spacing: 0.02em;
+  color: #1f2a33;
 }
 
 code {
@@ -47,56 +30,61 @@ code {
 
 ::-webkit-scrollbar {
   width: 10px;
-  background: #ffecd2;
+  background: #dfe5ec;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ff6a88;
+  background: #b7c2cf;
   border-radius: 8px;
 }
 
-/* Add a subtle glass effect for modals and cards globally */
+/* Panels and cards */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 32px 0 rgba(255, 94, 98, 0.17);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 20px;
-  border: 1.5px solid #ff6a88aa;
+  background: #fff;
+  border: 1px solid #e1e7ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
 }
 
-/* Enhance all buttons globally for bold, modern look */
+/* Buttons */
 .btn,
 button,
 input[type="button"],
 input[type="submit"] {
   font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
-  font-weight: bold;
-  font-size: 1.13rem;
-  border-radius: 2rem;
-  padding: 0.85rem 2.2rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  box-shadow: 0 2px 8px #ff6a8833, 0 0 8px #ffb86c22;
-  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  border: 1px solid transparent;
   outline: none;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
+
 .btn-primary,
 .floating-cart-btn {
-  background: linear-gradient(90deg, #ff6a88 0%, #ffb86c 100%);
+  background: #2f80ed;
   color: #fff;
+  border-color: #2f80ed;
+}
+.btn-primary:hover,
+.floating-cart-btn:hover {
+  background: #256bd1;
+  border-color: #256bd1;
 }
 .btn-primary:active,
 .floating-cart-btn:active {
-  background: linear-gradient(90deg, #ffb86c 0%, #ff6a88 100%);
-  color: #fff;
+  background: #1f5bb6;
+  border-color: #1f5bb6;
 }
+
 .btn-outline-secondary {
-  border: 2px solid #ff6a88;
-  color: #ff6a88;
+  border: 1px solid #d0d7e2;
+  color: #2f3b47;
   background: #fff;
 }
-.btn-outline-secondary:active {
-  background: #ff6a88;
-  color: #fff;
+.btn-outline-secondary:hover {
+  background: #f3f6fa;
+  border-color: #c6d0dc;
 }

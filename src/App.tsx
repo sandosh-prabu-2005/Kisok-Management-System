@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaShoppingCart } from "react-icons/fa";
 
-import ProductList from "./components/ProductList/ProductList";
 import CartModal from "./components/CartModal/CartModal";
 import ProductDetailModal from "./components/ProductDetail/ProductDetailModal";
 import Footer from "./components/Footer/Footer";
@@ -21,29 +20,68 @@ import {
   Button,
 } from "react-bootstrap";
 
+type Product = {
+  _id: string;
+  id?: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description?: string;
+  image?: string;
+  category?: string;
+  ingredients?: string;
+  allergens?: string;
+  reason?: string;
+};
+
+type CartItem = Product & { quantity: number };
+
+type SaleItem = {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+};
+
+type Sale = {
+  userId: string;
+  items: SaleItem[];
+  total: number;
+  timestamp: number;
+};
+
+type SuggestedItem = SaleItem & { count: number; image: string };
+
+type FeedbackForm = {
+  name: string;
+  admissionNumber: string;
+  message: string;
+};
+
+const ShoppingCartIcon = FaShoppingCart as unknown as React.ComponentType<
+  React.SVGProps<SVGSVGElement>
+>;
+
 const App = () => {
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [showCartModal, setShowCartModal] = useState(false);
   const [showAdmissionModal, setShowAdmissionModal] = useState(false);
   const [admissionNumber, setAdmissionNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showProductDetailModal, setShowProductDetailModal] = useState(false);
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [showCheckoutToast, setShowCheckoutToast] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
-  const [suggestedItems, setSuggestedItems] = useState([]);
+  const [suggestedItems, setSuggestedItems] = useState<SuggestedItem[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
   const [userId, setUserId] = useState("");
-  const menuDropdownRef = useRef(null);
-  const [showMenuDropdown, setShowMenuDropdown] = useState(false);
   const [showMenuPage, setShowMenuPage] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [feedback, setFeedback] = useState({
+  const [feedback, setFeedback] = useState<FeedbackForm>({
     name: "",
     admissionNumber: "",
     message: "",
@@ -53,7 +91,7 @@ const App = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/api/products");
+        const response = await axios.get<Product[]>("/api/products");
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -68,7 +106,7 @@ const App = () => {
         const url = userId
           ? `/api/recommendations?userId=${encodeURIComponent(userId)}`
           : "/api/recommendations";
-        const res = await axios.get(url);
+        const res = await axios.get<{ all?: Product[] }>(url);
         setRecommendations(res.data.all || []);
       } catch (err) {
         setRecommendations([]);
@@ -77,9 +115,11 @@ const App = () => {
     fetchRecommendations();
   }, [userId]);
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productId: string): Promise<void> => {
     try {
-      const { data: product } = await axios.get(`/api/products/${productId}`);
+      const { data: product } = await axios.get<Product>(
+        `/api/products/${productId}`
+      );
       if (!product || product.quantity <= 0) return;
       setCart((prev) => {
         const exists = prev.find((p) => p._id === product._id);
@@ -101,14 +141,14 @@ const App = () => {
     }
   };
 
-  const incrementQuantity = (productId) =>
+  const incrementQuantity = (productId: string) =>
     setCart((prev) =>
       prev.map((p) =>
         p._id === productId ? { ...p, quantity: p.quantity + 1 } : p
       )
     );
 
-  const decrementQuantity = (productId) =>
+  const decrementQuantity = (productId: string) =>
     setCart((prev) =>
       prev.map((p) =>
         p._id === productId && p.quantity > 1
@@ -117,7 +157,7 @@ const App = () => {
       )
     );
 
-  const removeFromCart = (prod) =>
+  const removeFromCart = (prod: CartItem) =>
     setCart((prev) => prev.filter((p) => p._id !== prod._id));
 
   const clearCart = () => setCart([]);
@@ -131,15 +171,17 @@ const App = () => {
   };
 
   // Fetch and analyze user order history for suggestions
-  const fetchUserSuggestions = async (adNo) => {
+  const fetchUserSuggestions = async (adNo: string): Promise<void> => {
     try {
-      const response = await axios.get("/api/sales");
+      const response = await axios.get<Sale[]>("/api/sales");
       const userOrders = response.data.filter((order) => order.userId === adNo);
       // Count item purchases
-      const itemCounts = {};
+      const itemCounts: Record<string, SuggestedItem> = {};
       userOrders.forEach((order) => {
         order.items.forEach((item) => {
-          if (!itemCounts[item.id]) itemCounts[item.id] = { ...item, count: 0 };
+          if (!itemCounts[item.id]) {
+            itemCounts[item.id] = { ...item, count: 0, image: "" };
+          }
           itemCounts[item.id].count += item.quantity;
         });
       });
@@ -163,7 +205,7 @@ const App = () => {
     }
   };
 
-  const handleAdmissionConfirm = async () => {
+  const handleAdmissionConfirm = async (): Promise<void> => {
     if (!admissionNumber) {
       setCheckoutError("Please enter your admission number.");
       return;
@@ -173,7 +215,7 @@ const App = () => {
     // Fetch suggestions for this user
     fetchUserSuggestions(admissionNumber);
     // Prepare sale data
-    const saleData = {
+    const saleData: Sale = {
       userId: admissionNumber,
       items: cart.map((i) => ({
         id: i._id,
@@ -206,7 +248,9 @@ const App = () => {
           body: rows,
           startY: 45,
         });
-        const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : 45;
+        const finalY = (doc as any).lastAutoTable
+          ? (doc as any).lastAutoTable.finalY
+          : 45;
         doc.setFontSize(14);
         doc.text(
           `Total Amount\nRs: ${calculateTotal().toFixed(2)}`,
@@ -221,7 +265,7 @@ const App = () => {
       setTimeout(() => setShowCheckoutToast(false), 3000);
       // Refetch products to update quantities after purchase
       try {
-        const response = await axios.get("/api/products");
+        const response = await axios.get<Product[]>("/api/products");
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products after purchase:", error);
@@ -232,35 +276,20 @@ const App = () => {
     }
   };
 
-  const handleProductClick = (p) => {
-    setSelectedProduct(p);
-    setShowProductDetailModal(true);
-  };
 
-  const handleHomeClick = () => setShowOrderHistory(false);
-
-  const filtered = products.filter((p) =>
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   // Floating cart button handler
   const handleFloatingCartClick = () => setShowCartModal(true);
 
   // Helper to highlight matching text
-  function highlightMatch(text, query) {
+  function highlightMatch(text: string, query: string): React.ReactNode {
     if (!query) return text;
     const idx = text.toLowerCase().indexOf(query.toLowerCase());
     if (idx === -1) return text;
     return (
       <>
         {text.substring(0, idx)}
-        <span
-          style={{
-            background: "#ffecd2",
-            color: "#ff6a88",
-            fontWeight: "bold",
-          }}
-        >
+        <span className="highlight-match">
           {text.substring(idx, idx + query.length)}
         </span>
         {text.substring(idx + query.length)}
@@ -271,23 +300,14 @@ const App = () => {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Container className="d-flex flex-column align-items-center my-3 py-3">
-        <div
-          className="d-flex align-items-center w-100 mb-2"
-          style={{ gap: "1.2rem" }}
-        >
+        <div className="d-flex align-items-center w-100 mb-2 brand-row">
           <img
             src={process.env.PUBLIC_URL + "/mepco-logo.png"}
             alt="Mepco College Logo"
-            style={{
-              height: 64,
-              width: "auto",
-              borderRadius: "1rem",
-              boxShadow: "0 2px 12px #ff6a8855",
-            }}
+            className="brand-logo"
           />
           <h1
-            className="fw-bold mb-0"
-            style={{ fontSize: "2.2rem", letterSpacing: "0.08em" }}
+            className="fw-bold mb-0 brand-title"
           >
             <Link
               to="/"
@@ -298,41 +318,24 @@ const App = () => {
               }}
             >
               Kiosk Vending Machine{" "}
-              <span style={{ color: "#ff6a88", fontWeight: 700 }}>
+              <span className="brand-dept">
                 | CSE Department
               </span>
             </Link>
           </h1>
         </div>
-        <div
-          className="d-flex justify-content-center position-relative"
-          style={{ gap: "0.7rem" }}
-        >
+        <div className="d-flex justify-content-center position-relative nav-btn-group">
           <button
             onClick={() => {
               setShowOrderHistory(false);
               setShowMenuPage(false);
             }}
-            className="btn nav-btn"
-            style={{
-              background: "#ff6a88",
-              color: "#fff",
-              fontWeight: 600,
-              borderRadius: 12,
-              boxShadow: "0 2px 8px #ff6a8833",
-            }}
+            className="btn nav-btn nav-btn-primary"
           >
             Home
           </button>
           <button
-            className="btn nav-btn"
-            style={{
-              background: "#ff6a88",
-              color: "#fff",
-              fontWeight: 600,
-              borderRadius: 12,
-              boxShadow: "0 2px 8px #ff6a8833",
-            }}
+            className="btn nav-btn nav-btn-primary"
             onClick={() => {
               setShowMenuPage(true);
               setShowOrderHistory(false);
@@ -345,33 +348,19 @@ const App = () => {
               setShowOrderHistory(true);
               setShowMenuPage(false);
             }}
-            className="btn nav-btn"
-            style={{
-              background: "#ff6a88",
-              color: "#fff",
-              fontWeight: 600,
-              borderRadius: 12,
-              boxShadow: "0 2px 8px #ff6a8833",
-            }}
+            className="btn nav-btn nav-btn-primary"
           >
             My Orders
           </button>
           <button
-            className="btn nav-btn"
-            style={{
-              background: "#ff6a88",
-              color: "#fff",
-              fontWeight: 600,
-              borderRadius: 12,
-              boxShadow: "0 2px 8px #ff6a8833",
-            }}
+            className="btn nav-btn nav-btn-primary"
             onClick={() => setShowFeedbackModal(true)}
           >
             Feedback
           </button>
         </div>
       </Container>
-      <Container className="mt-5 flex-grow-1" style={{padding: 0, maxWidth: '100vw'}}>
+      <Container className="mt-5 flex-grow-1 app-main">
         {checkoutError && (
           <Toast
             show
@@ -386,14 +375,13 @@ const App = () => {
           <UserOrderHistory />
         ) : showMenuPage ? (
           // MENU PAGE: Today's Items and search bar
-          <div className="menu-grid-container" style={{width: '100vw', maxWidth: '1200px', margin: '0 auto', padding: '0 1rem'}}>
-            <h2 className="fw-bold mb-4" style={{ color: "#ff6a88" }}>
+          <div className="menu-grid-container">
+            <h2 className="fw-bold mb-4 section-title">
               Today's Items
             </h2>
-            <div style={{ display: 'flex', justifyContent: 'end', marginBottom: '1.5rem' }}>
+            <div className="menu-search-row">
               <Form.Group
-                className="w-100 w-md-50 my-auto"
-                style={{ position: "relative" }}
+                className="w-100 w-md-50 my-auto menu-search-group"
               >
                 <InputGroup>
                   <InputGroup.Text>
@@ -456,72 +444,31 @@ const App = () => {
                       : suggestedItems;
                     if (filteredSuggestions.length === 0) return null;
                     return (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          left: 0,
-                          right: 0,
-                          background: "#fff",
-                          borderRadius: "0 0 1rem 1rem",
-                          boxShadow: "0 4px 16px #ff6a8855",
-                          zIndex: 10,
-                          padding: "0.5rem 0",
-                        }}
-                      >
-                        <div
-                          style={{
-                            padding: "0.5rem 1rem",
-                            color: "#ff6a88",
-                            fontWeight: "bold",
-                          }}
-                        >
+                      <div className="suggestions-panel">
+                        <div className="suggestions-header">
                           Suggestions for you
                         </div>
                         {filteredSuggestions.map((item, idx) => (
                           <div
                             key={item.id}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "0.7rem",
-                              padding: "0.5rem 1rem",
-                              cursor: "pointer",
-                              fontWeight: "bold",
-                              color:
-                                highlightedIndex === idx ? "#fff" : "#232526",
-                              background:
-                                highlightedIndex === idx
-                                  ? "#ff6a88"
-                                  : "transparent",
-                              borderBottom: "1px solid #ffecd2",
-                              borderRadius: highlightedIndex === idx ? 8 : 0,
-                              transition: "background 0.15s, color 0.15s",
-                            }}
+                            className={`suggestion-item ${
+                              highlightedIndex === idx ? "active" : ""
+                            }`}
                             onMouseDown={() => setSearchTerm(item.name)}
                             onMouseEnter={() => setHighlightedIndex(idx)}
                           >
                             <img
                               src={item.image}
                               alt={item.name}
-                              style={{
-                                width: 36,
-                                height: 36,
-                                objectFit: "cover",
-                                borderRadius: 8,
-                                boxShadow: "0 2px 8px #ff6a8833",
-                              }}
+                              className="suggestion-image"
                             />
-                            <span style={{ flex: 1 }}>
+                            <span className="suggestion-name">
                               {highlightMatch(item.name, searchTerm)}
                             </span>
                             <span
-                              style={{
-                                color:
-                                  highlightedIndex === idx ? "#fff" : "#ff6a88",
-                                fontWeight: "normal",
-                                fontSize: "0.95em",
-                              }}
+                              className={`suggestion-count ${
+                                highlightedIndex === idx ? "active" : ""
+                              }`}
                             >
                               ({item.count}x)
                             </span>
@@ -539,14 +486,13 @@ const App = () => {
                 )
                 .map((product) => (
                   <div key={product._id} className="menu-grid-item">
-                    <div className="card h-100 rounded-4 shadow-sm" style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                    <div className="card h-100 rounded-4 shadow-sm menu-card">
                       <img
                         src={product.image}
-                        className="card-img-top rounded-top-4 product-image"
+                        className="card-img-top rounded-top-4 product-image menu-card-img"
                         alt={product.name}
-                        style={{width: '100%', objectFit: 'cover', aspectRatio: '4/3', borderRadius: '1rem 1rem 0 0'}}
                       />
-                      <div className="card-body d-flex flex-column" style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                      <div className="card-body d-flex flex-column menu-card-body">
                         <h5 className="card-title fw-bold">{product.name}</h5>
                         <p className="card-text">
                           <strong>Price:</strong> ₹{product.price}
@@ -574,7 +520,7 @@ const App = () => {
           <>
             {recommendations.length > 0 && (
               <div className="mb-5">
-                <h2 className="fw-bold mb-3" style={{ color: "#ff6a88" }}>
+                <h2 className="fw-bold mb-3 section-title">
                   Recommended for you
                 </h2>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
@@ -595,10 +541,7 @@ const App = () => {
                             <strong>Quantity:</strong> {product.quantity}
                           </p>
                           {product.reason && (
-                            <div
-                              className="alert alert-info p-2 mt-2 mb-0"
-                              style={{ fontSize: "0.98em" }}
-                            >
+                            <div className="alert alert-info p-2 mt-2 mb-0 recommendation-reason">
                               <strong>Why?</strong> {product.reason}
                             </div>
                           )}
@@ -619,33 +562,16 @@ const App = () => {
               </div>
             )}
             {/* About College Section */}
-            <div
-              className="mb-5 p-4 glass about-college-section position-relative"
-              style={{
-                borderRadius: 24,
-                background: "rgba(255,255,255,0.85)",
-                boxShadow: "0 8px 32px #ff6a8833, 0 1.5px 8px #23252622",
-                overflow: "hidden",
-                maxWidth: 900,
-                margin: "0 auto",
-              }}
-            >
+            <div className="mb-5 p-4 glass about-college-section position-relative">
               <div className="d-flex flex-column flex-md-row align-items-center gap-4 mb-3">
                 <img
                   src={process.env.PUBLIC_URL + "/mepco-logo.png"}
                   alt="Mepco College Logo"
-                  style={{
-                    height: 90,
-                    width: 90,
-                    borderRadius: 20,
-                    boxShadow: "0 2px 16px #ff6a8855",
-                    background: "#fff",
-                  }}
+                  className="about-logo"
                 />
                 <div>
                   <h2
-                    className="fw-bold mb-1"
-                    style={{ color: "#ff6a88", fontSize: "2rem" }}
+                    className="fw-bold mb-1 about-title"
                   >
                     About Mepco Schlenk Engineering College
                   </h2>
@@ -656,13 +582,7 @@ const App = () => {
                   </div>
                 </div>
               </div>
-              <p
-                style={{
-                  fontSize: "1.13em",
-                  color: "#232526",
-                  marginBottom: 0,
-                }}
-              >
+              <p className="about-description">
                 Mepco Schlenk Engineering College, Sivakasi, is a premier
                 institution in Tamil Nadu, India, known for its academic
                 excellence, vibrant campus life, and commitment to innovation.
@@ -693,7 +613,7 @@ const App = () => {
         <ProductDetailModal
           show={showProductDetailModal}
           handleClose={() => setShowProductDetailModal(false)}
-          product={selectedProduct}
+          product={null}
           addToCart={addToCart}
         />
         {/* Admission Number Modal */}
@@ -856,7 +776,7 @@ const App = () => {
             onClick={handleFloatingCartClick}
             aria-label="View Cart"
           >
-            <FaShoppingCart />
+            <ShoppingCartIcon />
             <span className="floating-cart-count">{cart.length}</span>
           </button>
         )}
@@ -886,11 +806,11 @@ const Counter = ({ label, value }) => {
     return () => clearInterval(timer);
   }, [value]);
   return (
-    <div className="text-center" style={{ minWidth: 90 }}>
-      <div style={{ fontSize: "2rem", color: "#ff6a88", fontWeight: 700 }}>
+    <div className="text-center counter-box">
+      <div className="counter-value">
         {count.toLocaleString()}
       </div>
-      <div style={{ fontSize: "1em", color: "#232526", fontWeight: 500 }}>
+      <div className="counter-label">
         {label}
       </div>
     </div>
@@ -903,23 +823,15 @@ const LearnMoreSection = () => {
   return (
     <div className="mt-3">
       <button
-        className="btn btn-outline-primary btn-sm mb-2"
-        style={{ borderRadius: 12, fontWeight: 600 }}
+        className="btn btn-outline-primary btn-sm mb-2 learn-more-btn"
         onClick={() => setExpanded((e) => !e)}
         aria-expanded={expanded}
       >
         {expanded ? "Hide Details" : "Learn More"}
       </button>
       {expanded && (
-        <div
-          className="p-3 rounded-4"
-          style={{
-            background: "#fff6fa",
-            color: "#232526",
-            fontSize: "1.05em",
-          }}
-        >
-          <ul style={{ marginBottom: 0 }}>
+        <div className="p-3 rounded-4 learn-more-panel">
+          <ul className="learn-more-list">
             <li>NBA & NAAC accredited programs</li>
             <li>Strong placement record with top MNCs</li>
             <li>Active research and innovation centers</li>
@@ -947,29 +859,19 @@ const CollegeCarousel = () => {
   }, [highlights.length]);
   return (
     <div className="mt-4 d-flex flex-column align-items-center">
-      <div
-        className="rounded-4 shadow-sm mb-2"
-        style={{ width: 220, height: 120, overflow: "hidden", background: "#fff" }}
-      >
+      <div className="rounded-4 shadow-sm mb-2 carousel-card">
         <img
           src={highlights[idx].img}
           alt={highlights[idx].caption}
-          style={{ width: "100%", height: "100%", objectFit: "cover", transition: "opacity 0.5s" }}
+          className="carousel-image"
         />
       </div>
-      <div style={{ color: "#ff6a88", fontWeight: 600 }}>{highlights[idx].caption}</div>
+      <div className="carousel-caption">{highlights[idx].caption}</div>
       <div className="d-flex gap-2 mt-1">
         {highlights.map((_, i) => (
           <span
             key={i}
-            style={{
-              display: "inline-block",
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              background: idx === i ? "#ff6a88" : "#ffecd2",
-              transition: "background 0.2s",
-            }}
+            className={`carousel-dot ${idx === i ? "active" : ""}`}
           />
         ))}
       </div>
