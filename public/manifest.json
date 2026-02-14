@@ -1,0 +1,9 @@
+{
+  "short_name": "Kiosk",
+  "name": "Kiosk Vending Machine",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#000"
+}

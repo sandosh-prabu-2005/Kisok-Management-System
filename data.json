@@ -1,0 +1,58 @@
+[
+  {
+    "id": "prod001",
+    "name": "Masala Dosa",
+    "price": 40,
+    "quantity": 25,
+    "description": "Crispy dosa filled with spiced mashed potatoes. Served with chutney and sambar.",
+    "image": "https://delishglobe.com/wp-content/uploads/2024/09/Masala-dosa-1-1536x1124.png"
+  },
+  {
+    "id": "prod002",
+    "name": "Veg Puff",
+    "price": 15,
+    "quantity": 50,
+    "description": "Flaky pastry filled with a spicy vegetable mix.",
+    "image": "https://www.mrishtanna.com/wp-content/uploads/2017/11/veg-puff-air-fry.jpg"
+  },
+  {
+    "id": "prod003",
+    "name": "Idli with Sambar",
+    "price": 30,
+    "quantity": 40,
+    "description": "Soft steamed rice cakes served with hot sambar and coconut chutney.",
+    "image": "https://sapanarestaurant.com/wp-content/uploads/2019/11/idli-sambar-900x600.jpg"
+  },
+  {
+    "id": "prod004",
+    "name": "Chai (Tea)",
+    "price": 10,
+    "quantity": 100,
+    "description": "Hot Indian-style milk tea with a blend of spices.",
+    "image": "https://www.teaforturmeric.com/wp-content/uploads/2021/11/Masala-Chai-Tea-9-728x1092.jpg"
+  },
+  {
+    "id": "prod005",
+    "name": "Aloo Paratha",
+    "price": 35,
+    "quantity": 20,
+    "description": "Whole wheat flatbread stuffed with spicy mashed potatoes. Served with curd.",
+    "image": "https://abiscookbook.com/wp-content/uploads/2020/04/Screenshot_20200426-162224-01-1024x1024.jpeg"
+  },
+  {
+    "id": "prod007",
+    "name": "Paneer Roll",
+    "price": 45,
+    "quantity": 30,
+    "description": "Indian flatbread rolled with paneer tikka and veggies.",
+    "image": "https://spicecravings.com/wp-content/uploads/2020/12/Paneer-kathi-Roll-6.jpg"
+  },
+  {
+    "id": "prod009",
+    "name": "Poha",
+    "price": 25,
+    "quantity": 30,
+    "description": "Flattened rice cooked with spices, onions, and peanuts.",
+    "image": "https://www.vegrecipesofindia.com/wp-content/uploads/2022/09/poha-recipe-1-1024x1536.jpg"
+  }
+]

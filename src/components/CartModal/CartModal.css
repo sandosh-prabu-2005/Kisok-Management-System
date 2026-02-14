@@ -1,0 +1,150 @@
+/* Cart modal: solid background, no gradient, bold stylish font */
+.modal-content {
+  position: relative;
+  border-radius: 2rem;
+  background: #fff;
+  box-shadow: 0 0 32px 8px #ff6a88cc, 0 12px 48px 0 rgba(0, 0, 0, 0.22),
+    0 2px 12px #ff6a8855;
+  border: 2px solid #ff6a88cc;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #111;
+  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.modal-content::before {
+  display: none !important;
+}
+
+.modal-header,
+.modal-footer {
+  border: none;
+  background: transparent;
+}
+
+.btn-success {
+  background: #ff6a88;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2rem;
+  font-size: 1.13rem;
+  box-shadow: 0 0 16px 2px #ff6a88cc, 0 2px 8px #23252633;
+  letter-spacing: 0.03em;
+  padding: 0.85rem 2.2rem;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+}
+.btn-success:active {
+  background: #232526;
+  color: #fff;
+  box-shadow: 0 0 24px 4px #ff6a88ee;
+}
+
+.btn-outline-danger {
+  border: 2px solid #ff4b2b;
+  color: #ff4b2b;
+  background: #fff;
+  font-weight: bold;
+  border-radius: 2rem;
+  font-size: 1.13rem;
+  box-shadow: 0 0 12px 2px #ff4b2bcc, 0 2px 8px #ff4b2b33;
+  padding: 0.85rem 2.2rem;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+}
+.btn-outline-danger:active {
+  background: #ff4b2b;
+  color: #fff;
+  box-shadow: 0 0 20px 4px #ff4b2bee;
+}
+
+.modal-footer {
+  flex-direction: row-reverse;
+  gap: 1.2rem;
+  justify-content: stretch;
+}
+
+.btn-success,
+.btn-outline-danger {
+  width: 48%;
+  min-width: 120px;
+  max-width: 100%;
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .btn-success,
+  .btn-outline-danger {
+    width: 100%;
+    margin-bottom: 0.7rem;
+  }
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 0.7rem;
+    align-items: stretch;
+  }
+}
+
+.monospace.fw-bold.me-auto {
+  color: #111;
+  font-size: 1.5rem;
+  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  font-weight: bold;
+  background: none;
+  -webkit-text-fill-color: #111;
+  animation: none;
+}
+
+/* CartModal: fix alignment and sizing of quantity and remove buttons */
+.modal-body .d-flex.align-items-center {
+  gap: 0.7rem;
+}
+
+.btn.btn-sm.btn-outline-secondary,
+.btn.btn-sm.btn-outline-danger {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  box-shadow: none;
+  margin: 0 2px;
+}
+
+.btn.btn-sm.btn-outline-danger {
+  border: 2px solid #ff4b2b;
+  color: #ff4b2b;
+  background: #fff;
+  font-weight: bold;
+  box-shadow: 0 0 8px 2px #ff4b2b33;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn.btn-sm.btn-outline-danger:active {
+  background: #ff4b2b;
+  color: #fff;
+  box-shadow: 0 0 12px 2px #ff4b2bee;
+}
+
+/* Quantity number alignment */
+.d-flex.align-items-center > span {
+  min-width: 28px;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #111;
+}

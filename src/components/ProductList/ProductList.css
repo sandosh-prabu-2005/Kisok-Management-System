@@ -1,0 +1,148 @@
+.product-image {
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 2px 12px #ff6a8833;
+  margin-bottom: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.product-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  animation: shineMove 2.5s infinite;
+}
+@keyframes shineMove {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+@media (max-width: 767px) {
+  .row-cols-md-3 {
+    --bs-rows: 4;
+    --bs-columns: 3;
+  }
+}
+
+@media (min-width: 768px) {
+  .row-cols-md-3 {
+    --bs-rows: 3;
+    --bs-columns: 4;
+  }
+}
+
+.pr {
+  cursor: pointer;
+}
+
+/* Product cards: touch-friendly, marketing-inspired vibrant theme, bold box shadow, improved alignment */
+.card {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  box-shadow: 0 8px 32px 0 rgba(255, 94, 98, 0.18), 0 2px 8px #ff6a8855;
+  border-radius: 22px;
+  border: 1.5px solid #ff6a88aa;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 350px;
+  padding-bottom: 1rem;
+  transition: box-shadow 0.2s;
+}
+.card-title {
+  color: #ff6a88;
+  font-family: "Space Grotesk", "Montserrat", Arial, sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  color: #2d3a4b;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+/* Buttons styling */
+.btn-primary,
+.btn-outline-secondary {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border-radius: 1.7rem;
+  font-size: 1.13rem;
+  padding: 0.85rem 0;
+  box-shadow: 0 2px 8px #ff6a8833;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #ff6a88 0%, #ffb86c 100%);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+.btn-outline-secondary {
+  border: 1.5px solid #ff6a88;
+  color: #ff6a88;
+  background: transparent;
+  font-weight: 500;
+}
+
+/* Remove all hover effects for touch devices */
+.card:hover,
+.btn-primary:hover,
+.btn-outline-secondary:hover {
+  box-shadow: 0 8px 32px 0 rgba(67, 198, 172, 0.25), 0 2px 8px #43c6ac33;
+  background: inherit;
+  color: inherit;
+}
+
+.card .d-flex.flex-row.align-items-center.gap-2 {
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+/* Floating cart button: add pulsing glow animation */
+.floating-cart-btn {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  background: linear-gradient(90deg, #ff6a88 0%, #ffb86c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  box-shadow: 0 4px 24px #ff6a8877, 0 0 0 0 #ffb86c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  z-index: 1000;
+  transition: background 0.2s, box-shadow 0.2s;
+  animation: pulseGlow 1.8s infinite alternate;
+}
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 4px 24px #ff6a8877, 0 0 0 0 #ffb86c;
+  }
+  100% {
+    box-shadow: 0 8px 32px #ff6a88cc, 0 0 24px 8px #ffb86c88;
+  }
+}
